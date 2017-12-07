@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero'; // <- import the Hero class in order to bind with the herosComponent
-import { HEROES } from '../mock-heroes'; // <-import the arrays of mock hero to list
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -9,17 +9,22 @@ import { HEROES } from '../mock-heroes'; // <-import the arrays of mock hero to 
 })
 export class HeroesComponent implements OnInit {
 
-  heroes = HEROES; // binding heroes from the CONST HEROES from mock-heroes.ts
-
   selectedHero: Hero; // binding for selectedHero as Hero, so angular knows what object to look for
+
+  heroes: Hero[]; // binding heroes from the CONST HEROES from mock-heroes.ts
+
+  constructor(private heroService: HeroService) { }
+
+  ngOnInit() {
+    this.getHeroes();
+  }
 
   onSelect(hero: Hero): void { // method for onSelect listener for heros.component.html
     this.selectedHero = hero;
   }
 
-  constructor() { }
-
-  ngOnInit() {
+  getHeroes(): void {
+    this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
   }
-
 }
